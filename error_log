@@ -1,0 +1,110 @@
+[29-Mar-2025 16:13:19 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[29-Mar-2025 16:13:33 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[29-Mar-2025 16:13:34 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[29-Mar-2025 16:13:35 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[29-Mar-2025 16:13:37 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[29-Mar-2025 16:13:54 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[30-Mar-2025 11:30:21 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[30-Mar-2025 11:30:30 Asia/Tehran] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'email' in 'field list' in /home/poolro/public_html/main2.php:49
+Stack trace:
+#0 /home/poolro/public_html/main2.php(49): mysqli->query()
+#1 {main}
+  thrown in /home/poolro/public_html/main2.php on line 49
+[30-Mar-2025 11:38:42 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/poolro/public_html/get_predictions.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/poolro/public_html/get_predictions.php on line 31
+[30-Mar-2025 11:39:48 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::get_result() in /home/poolro/public_html/get_predictions.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/poolro/public_html/get_predictions.php on line 31
+[30-Mar-2025 12:44:57 Asia/Tehran] PHP Warning:  require(src/PHPMailer.php): failed to open stream: No such file or directory in /home/poolro/public_html/reset_password.php on line 5
+[30-Mar-2025 12:44:57 Asia/Tehran] PHP Warning:  require(src/PHPMailer.php): failed to open stream: No such file or directory in /home/poolro/public_html/reset_password.php on line 5
+[30-Mar-2025 12:44:57 Asia/Tehran] PHP Fatal error:  require(): Failed opening required 'src/PHPMailer.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/poolro/public_html/reset_password.php on line 5
+[30-Mar-2025 13:43:37 Asia/Tehran] PHP Notice:  Trying to get property 'num_rows' of non-object in /home/poolro/public_html/reset_password.php on line 27
+[30-Mar-2025 13:53:05 Asia/Tehran] PHP Notice:  Trying to get property 'num_rows' of non-object in /home/poolro/public_html/reset_password.php on line 27
+[30-Mar-2025 13:56:39 Asia/Tehran] PHP Notice:  Trying to get property 'num_rows' of non-object in /home/poolro/public_html/reset_password.php on line 27
+[30-Mar-2025 13:56:47 Asia/Tehran] PHP Notice:  Trying to get property 'num_rows' of non-object in /home/poolro/public_html/reset_password.php on line 27
+[30-Mar-2025 13:57:09 Asia/Tehran] PHP Notice:  Trying to get property 'num_rows' of non-object in /home/poolro/public_html/reset_password.php on line 27
+[30-Mar-2025 14:37:24 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/poolro/public_html/main2.php on line 11
+[30-Mar-2025 14:37:24 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/poolro/public_html/main2.php on line 11
+[30-Mar-2025 14:39:13 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/poolro/public_html/main2.php on line 11
+[30-Mar-2025 14:39:13 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/poolro/public_html/main2.php on line 11
+[30-Mar-2025 14:53:50 Asia/Tehran] localhost
+[30-Mar-2025 14:53:50 Asia/Tehran] localhost
+[30-Mar-2025 14:56:37 Asia/Tehran] localhost
+[30-Mar-2025 14:56:37 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined function gettypr() in /home/poolro/public_html/main2.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/poolro/public_html/main2.php on line 8
+[30-Mar-2025 14:56:37 Asia/Tehran] localhost
+[30-Mar-2025 14:56:37 Asia/Tehran] PHP Fatal error:  Uncaught Error: Call to undefined function gettypr() in /home/poolro/public_html/main2.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/poolro/public_html/main2.php on line 8
+[30-Mar-2025 14:57:22 Asia/Tehran] localhost
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] poolro_trader
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] j4w%sr8fe];&
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] poolro_trade
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] j4w%sr8fe];&
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] localhost
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] poolro_trader
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] j4w%sr8fe];&
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] poolro_trade
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 14:57:22 Asia/Tehran] j4w%sr8fe];&
+[30-Mar-2025 14:57:22 Asia/Tehran] string
+[30-Mar-2025 21:01:16 Asia/Tehran] PHP Notice:  Undefined variable: username in /home/poolro/public_html/change_password.php on line 13
+[30-Mar-2025 21:01:16 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user ''@'localhost' (using password: YES) in /home/poolro/public_html/change_password.php on line 13
+[30-Mar-2025 21:17:55 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/get_predictions.php on line 15
+[30-Mar-2025 22:29:39 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:29:40 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:29:41 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:29:42 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:29:43 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:29:44 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:33 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:34 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:36 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:37 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:38 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:39 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:40 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:41 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14
+[30-Mar-2025 22:33:45 Asia/Tehran] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'j4w%sr8fe];&amp;'@'localhost' (using password: YES) in /home/poolro/public_html/insert_prediction.php on line 14

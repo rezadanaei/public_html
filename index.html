@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بازی باینری آپشن با کندل‌استیک</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+
+    input,
+    button {
+      padding: 10px;
+      font-size: 1em;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: 400px;
+    }
+
+    .balance {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    .bet-amount {
+      margin: 20px 0;
+    }
+
+    .bet-amount input {
+      padding: 10px;
+      font-size: 1em;
+      width: 100px;
+      text-align: center;
+    }
+
+    .withdraw-btn {
+      background-color: #ff9800;
+    }
+
+    .withdraw-btn:hover {
+      background-color: #fb8c00;
+    }
+
+    .logout-btn{
+      background-color: blue;
+    }
+
+    .down {
+      background-color: #d00000;
+    }
+
+    .analysis {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    #analysisNumbers {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .analysis-item {
+      font-weight: bold;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      width: 80px;
+      text-align: center;
+    }
+
+    /* استایل فرم ثبت‌نام و ورود */
+    .form-box {
+      background: white;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .form-box input {
+      width: 90%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-box button {
+      width: 95%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .form-box button:hover {
+      background: #0056b3;
+    }
+
+    .toggle-link {
+      color: #007bff;
+      cursor: pointer;
+      margin-top: 15px;
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* استایل مدال هشدار سفارشی */
+    #customAlert {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    #customAlertBox {
+      background-color: white;
+      margin: 20% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    #customAlertBox button {
+      padding: 8px 16px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- مدال هشدار سفارشی -->
+  <div id="customAlert">
+    <div id="customAlertBox">
+      <p id="alertText">هشدار</p>
+      <button onclick="closeCustomAlert()">تأیید</button>
+    </div>
+  </div>
+
+  <!-- فرم ثبت‌نام و ورود -->
+  <div class="form-box" id="authContainer">
+    <div id="registerForm">
+      <h2>ثبت‌نام</h2>
+      <input type="text" id="regUsername" placeholder="نام کاربری">
+      <input type="password" id="regPassword" placeholder="رمز عبور">
+      <input type="text" id="regCard" placeholder="شماره کارت">
+      <input type="text" id="regPhone" placeholder="شماره موبایل">
+      <input type="text" id="regEmail" placeholder="ایمیل">
+      <button onclick="register()">ثبت‌نام</button>
+      <span class="toggle-link" onclick="showLogin()" dir="rtl">قبلاً ثبت‌نام کرده‌اید؟ ورود</span>
+    </div>
+
+    <div id="loginForm" class="hidden">
+      <h2>ورود</h2>
+      <input type="text" id="loginUsername" placeholder="نام کاربری">
+      <input type="password" id="loginPassword" placeholder="رمز عبور">
+      <button onclick="login()">ورود</button>
+      <span class="toggle-link" onclick="showRegister()" dir="rtl">حساب کاربری ندارید؟ ثبت‌نام</span>
+      <span class="toggle-link" onclick="showForgotPassword()" dir="rtl">فراموشی رمز عبور</span>
+    </div>
+    
+    <div id="forgetPasswordForm" class="hidden">
+      <h2>فراموشی رمز عبور</h2>
+      <input type="text" id="forgotEmail" placeholder="ایمیل">
+      <button onclick="resetPassword()">ارسال رمز موقت</button>
+      <span class="toggle-link" onclick="showRegister()" dir="rtl">حساب کاربری ندارید؟ ثبت‌نام</span>
+      <span class="toggle-link" onclick="showLogin()" dir="rtl">قبلاً ثبت‌نام کرده‌اید؟ ورود</span>
+    </div>
+    <br>
+    <span class="text-danger hidden" id="tempPass" dir="rtl">رمز موقت برای شما فرستاده شده است. در اولین ورود آن را تغییر دهید</span>
+    
+  </div>
+
+  <!-- صفحه بازی -->
+  <div class="container hidden" id="gameContainer">
+  
+    <nav class="navbar navbar-light bg-light p-3">
+      <div class="container-fluid">
+          <span class="navbar-brand mb-0 h5" id="gameUser">👤 Username</span>
+      </div>
+  </nav>
+
+    <h1>بازی باینری آپشن با کندل‌استیک</h1>
+    <div class="balance">موجودی شما: <span id="balance">100,000</span> تومان</div>
+
+    <div class="analysis">
+      <h2>تحلیل</h2>
+      <div id="analysisNumbers">
+        <span class="analysis-item" id="analysis1">000</span>
+        <span class="analysis-item" id="analysis2">000</span>
+        <span class="analysis-item" id="analysis3">000</span>
+        <span class="analysis-item" id="analysis4">000</span>
+      </div>
+    </div>
+
+    <div class="bet-amount">
+      <label for="betInput">مبلغ معامله (تومان):</label>
+      <input type="number" id="betInput" value="10000" />
+    </div>
+    <canvas id="candlestickChart"></canvas>
+    <div class="buttons">
+      <button class="up" onclick="makePrediction('up')">خرید</button>
+      <button class="down" onclick="makePrediction('down')">فروش</button>
+    </div>
+
+    <div class="result" id="result" dir="rtl">منتظر انتخاب شما...</div>
+
+    <!-- بخش تغییر موجودی -->
+    <div id="update-balance" style="display: block; margin-top: 20px;">
+      <label for="new-balance">درخواست برداشت پول مجازی</label>
+      <input type="number" id="payment_request" placeholder="مبلغ مورد نظر را وارد کنید">
+      <button id="withdrawBtn" class="withdraw-btn" onclick="withdraw()">برداشت پول مجازی</button>
+  </div>
+  <div>
+    <button class="btn btn-primary" onclick="show_change_password()">تعویض رمز</button>
+    <div style="display: none;" id="show_change_password">
+      <label for="new-balance" dir="rtl">رمز جدید خود را وارد کنید:</label>
+      <input type="text" id="change_password_request">
+      <button id="withdrawBtn" class="btn btn-secondary" onclick="change_password()">اعمال تغییرات</button>    
+    </div>
+  </div>
+  </div>
+
+  <script>
+    let users = [];
+    let currentUser = null;
+
+    // توابع فرم ثبت‌نام و ورود
+    function showLogin() {
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('tempPass').classList.add('hidden');
+      document.getElementById('forgetPasswordForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+    }
+
+    function showRegister() {
+      document.getElementById('tempPass').classList.add('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('forgetPasswordForm').classList.add('hidden');
+      document.getElementById('registerForm').classList.remove('hidden');
+    }
+
+    function register() {
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const card = document.getElementById('regCard').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const balance = 0;
+      const email = document.getElementById('regEmail').value.trim();
+
+      if (!username || !password || !card || !phone || !email) {
+        showCustomAlert("همه فیلدها الزامی هستند.");
+        return;
+      }
+
+      // prevent duplicate username in DataBase
+      checkUsername(username)
+      
+      // Prepare form data
+      const formData = new FormData();
+            formData.append('action', 'signup');
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('card_number', card);
+            formData.append('phone_number', phone);
+            formData.append('balance', balance);
+            formData.append('email', email);
+
+      // Send POST request to PHP
+      fetch('main2.php', {
+                method: 'POST',
+                body: formData, action: 'signup'
+            })
+            .then(response => response.json())
+            .then(data => {
+              if(data.status === true){
+                showCustomAlert("ثبت‌نام با موفقیت انجام شد. اکنون وارد شوید.");
+                showLogin();
+              }
+            })
+
+    }
+
+    function checkUsername(username) {
+    fetch(`main2.php?username=${encodeURIComponent(username)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === false) {
+                // Username already taken
+                showCustomAlert("این نام کاربری قبلاً ثبت شده.");
+              }
+        })
+        .catch(error => console.error('Error:', error));
+      }
+
+    function login(
+        username = document.getElementById('loginUsername').value.trim(),
+        password = document.getElementById('loginPassword').value.trim(),
+      ) {
+      // Basic validation for empty fields
+      if (!username || !password) {
+        showCustomAlert("همه فیلدها الزامی هستند.");
+        return;
+      }
+
+
+      // Send login credentials to the backend
+      fetch('login.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json', // Inform the server you're sending JSON
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          }) // Send the username and password in the request body
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data);
+          if (data.status === 'success') {
+
+            currentUser = data.user;
+            // console.log(currentUser);
+            // localStorage.setItem('currentUser', JSON.stringify(currentUser)); // Store user data in localStorage
+            document.getElementById('authContainer').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+            document.getElementById('gameUser').innerHTML = "👤" + currentUser.username;
+            updateBalance();
+
+          } else {
+              // alert(data.message || 'Login failed. Please check your credentials.');
+              showCustomAlert("نام کاربری یا رمز عبور اشتباه است.");
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          // ('An error occurred. Please try again later.');
+      });
+
+
+
+    }
+
+
+    // توابع بازی
+    function updateBalance() {
+      document.getElementById("balance").textContent = currentUser.balance + " تومان";
+    }
+
+    const initialCandles = [
+      { x: 1, o: 1000, h: 1020, l: 980, c: 1010 },
+      { x: 2, o: 1010, h: 1030, l: 1000, c: 1020 },
+      { x: 3, o: 1020, h: 1050, l: 1010, c: 1040 },
+      { x: 4, o: 1040, h: 1060, l: 1020, c: 1030 }
+    ];
+
+    const ctx = document.getElementById('candlestickChart').getContext('2d');
+    const candlestickChart = new Chart(ctx, {
+      type: 'candlestick',
+      data: {
+        datasets: [{
+          label: 'قیمت',
+          data: initialCandles,
+          borderColor: 'black',
+          color: {
+            up: '#4caf50',
+            down: '#f44336',
+            unchanged: '#999'
+          }
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { type: 'linear' },
+          y: { beginAtZero: false }
+        }
+      }
+    });
+
+    function addCandle() {
+      const lastCandle = initialCandles[initialCandles.length - 1];
+      const open = lastCandle.c;
+      const close = open + (Math.random() > 0.5 ? Math.random() * 20 : -Math.random() * 20);
+      const high = Math.max(open, close) + Math.random() * 10;
+      const low = Math.min(open, close) - Math.random() * 10;
+
+      const newCandle = { x: initialCandles.length + 1, o: open, h: high, l: low, c: close };
+      initialCandles.push(newCandle);
+      candlestickChart.data.datasets[0].data.push(newCandle);
+      candlestickChart.update();
+    }
+
+    function updateAnalysis() {
+      for (let i = 1; i <= 4; i++) {
+        const randomNumber = Math.floor(Math.random() * 900) + 100;
+        document.getElementById(`analysis${i}`).textContent = randomNumber;
+      }
+    }
+
+    function makePrediction(prediction) {
+      const betAmount = parseInt(document.getElementById('betInput').value);
+      if (betAmount < 10000) {
+        showCustomAlert("مبلغ معامله باید حداقل ۱۰ هزار تومان باشد.");
+        return;
+      }
+      if (betAmount > parseInt(currentUser.balance)) {
+        showCustomAlert("موجودی کافی نیست.");
+        return;
+      }
+
+      const lastCandle = initialCandles[initialCandles.length - 1];
+
+      addCandle();
+      const newCandle = initialCandles[initialCandles.length - 1];
+      const predictionResult = (prediction === 'up' && newCandle.c > lastCandle.c) ||
+        (prediction === 'down' && newCandle.c < lastCandle.c);
+      let candleColor = "none";
+      if(parseInt(lastCandle.o) - parseInt(newCandle.o) > 0){
+        candleColor = "red";
+      }else if(parseInt(lastCandle.o) - parseInt(newCandle.o) < 0){
+        candleColor = "green";
+      }else{
+        candleColor = "gray";
+      }
+
+
+
+      const userBalanceBefore = currentUser.balance;
+      if (predictionResult) {
+        currentUser.balance = parseInt(currentUser.balance) + parseInt(betAmount);
+        predictionInDB(currentUser.username, userBalanceBefore, currentUser.balance, betAmount, candleColor, 'win');
+        document.getElementById("result").textContent = "شما برنده شدید!";
+      } else {
+        currentUser.balance = parseInt(currentUser.balance) - parseInt(betAmount);
+        predictionInDB(currentUser.username, userBalanceBefore, currentUser.balance, betAmount, candleColor, 'lose');
+        document.getElementById("result").textContent = "شما باختید.";
+      }
+
+      updateBalance();
+      updateBalance_in_db(currentUser.username, currentUser.balance);
+      updateAnalysis();
+    }
+
+    function withdraw() {
+      const payment_balance = document.getElementById('payment_request'); 
+      const withdrawalAmount = parseInt(payment_balance.value);
+      if (withdrawalAmount == 0) {
+        showCustomAlert('مبلغ کافی نیست');
+      }
+      
+      else if(currentUser.status == 'ban'){
+        showCustomAlert('حساب کاربری شما مسدود است.')
+      }
+      else if(parseInt(currentUser.balance) - withdrawalAmount <= 0){
+        showCustomAlert('موجودی کافی نیست')
+      }
+      else if(payment_balance.value === ""){
+        showCustomAlert('لطفا مبلغ را وارد نمایید');
+      }
+      else {
+        createPaymentRequest(currentUser.username, currentUser.card_number, withdrawalAmount);
+        currentUser.balance = parseInt(currentUser.balance) - withdrawalAmount;
+
+        updateBalance_in_db(currentUser.username, parseInt(currentUser.balance));
+        console.log("cu:", currentUser);
+        updateBalance();
+
+        const eitaayarToken = "bot332148:5ff115c7-2b21-4793-b56c-4e2199c83b1d";
+        const eitaaChatID = "10280591";
+        const eitaaText = "میزان مبلغ:" + "%0A" + withdrawalAmount + "%0A%E2%80%8C";
+
+        const requestOptions = {
+          method: "GET",
+          redirect: "follow"
+        };
+
+        fetch("https://eitaayar.ir/api/" + eitaayarToken + "/sendMessage?chat_id=" + eitaaChatID + "&text=" + eitaaText, requestOptions);
+
+        showCustomAlert("برداشت موفقیت‌آمیز بود.");
+      }
+    }
+
+    function showCustomAlert(message) {
+      document.getElementById("alertText").textContent = message;
+      document.getElementById("customAlert").style.display = "block";
+    }
+
+    function closeCustomAlert() {
+      document.getElementById("customAlert").style.display = "none";
+    }
+
+
+
+    function updateBalance_in_db(username, newBalance) {
+            document.getElementById("balance").textContent = newBalance; // Update UI
+
+            fetch('update_balance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username, // Send username
+                    balance: newBalance // Send balance
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    console.log('Balance updated!');
+                } else {
+                    console.log('Update failed!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        async function createPaymentRequest(username, cardNumber, amount) {
+            if (!username || !cardNumber || !amount) {
+                return;
+            }
+
+            try {
+                const response = await fetch('create_payment_request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, cardNumber, amount })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('Payment request created successfully!');
+                } else {
+                    console.log('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.log('Error: ' + error.message);
+            }
+        }
+    
+
+
+    function show_change_password(){
+      const elemn = document.getElementById('show_change_password');
+
+      elemn.style.setProperty("display", "block", "important");
+    }
+    function change_password(){
+      const newPassword = document.getElementById('change_password_request').value;
+
+      fetch("change_password.php", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              username: currentUser.username,
+              new_password: newPassword
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              console.log("Password changed successfully!");
+              showCustomAlert("رمز شما با موفقیت تغییر کرد.")
+          } else {
+              console.log("Error: " + data.message);
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
+      });
+
+
+
+
+
+    }
+
+
+    function showForgotPassword(){
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('forgetPasswordForm').classList.remove('hidden');
+    }
+
+
+
+    function resetPassword() {
+            const email = document.getElementById("forgotEmail").value.trim();
+            if (!email) {
+                showCustomAlert("لطفا ایمیل خود را وارد کنید");
+                return;
+            }
+
+            fetch("reset_password.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                showCustomAlert('ایمیل رمز موقت برای شما ارسال شد.')
+                showLogin();
+                document.getElementById('tempPass').classList.remove('hidden');
+
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                consol.log("An error occurred. Please try again.");
+            });
+        }
+
+
+
+
+    function predictionInDB(username, balanceBefore, balanceAfter, amount, lastCandle, result){
+      const data = {
+        username: username,
+        balance_before: balanceBefore,
+        balance_after: balanceAfter,
+        prediction_amount: amount,
+        last_candle: lastCandle,
+        result: result
+    };
+
+      fetch('insert_prediction.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              console.log("Prediction inserted successfully!");
+          } else {
+              console.error("Error:", data.message);
+          }
+      })
+      .catch(error => console.error("Request failed:", error));
+    }
+
+    
+  </script>
+
+</body>
+
+</html>

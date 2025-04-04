@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .search {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search input {
+            padding: 8px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .user-list {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .user-list th, .user-list td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .user-list th {
+            background-color: #f4f4f4;
+            color: #555;
+        }
+        .user-list tr:hover {
+            background-color: #f9f9f9;
+        }
+        .edit-btn, .block-btn, .unblock-btn, .predict-btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+        }
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .block-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .unblock-btn {
+            background-color: #008CBA;
+            color: white;
+        }
+        .predict-btn{
+            background-color: gold;
+            color: white; 
+        }
+        .update-btn {
+            padding: 5px 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .blocked {
+            background-color: #f2dede;
+        }
+        .blocked .edit-btn {
+            display: none;
+        }
+        .blocked .unblock-btn {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>پنل مدیریت کاربران</h1>
+    
+    <!-- جستجو بر اساس شماره تلفن -->
+    <div class="search">
+        <input type="text" id="search-phone" placeholder="شماره تلفن کاربر را وارد کنید" onkeyup="searchUser()">
+    </div>
+
+    <!-- لیست کاربران -->
+    <table class="user-list" id="user-list">
+        <thead>
+            <tr>
+                <th>نام کاربری</th>
+                <th>پسورد</th>
+                <th>شماره تماس</th>
+                <th>شماره کارت</th>
+                <th>ایمیل</th>
+                <th>موجودی</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- بخش تغییر موجودی -->
+    <div id="update-balance" style="display: none; margin-top: 20px;">
+        <label for="new-balance">موجودی جدید:</label>
+        <input type="number" id="new-balance">
+        <button class="update-btn" onclick="updateBalance()">بروزرسانی موجودی</button>
+    </div>
+
+    <!-- لیست درخواست‌های برداشت -->
+    <h3 style="margin-top:40px;">درخواست‌های برداشت</h3>
+    <table class="user-list" id="withdraw-list">
+        <thead>
+            <tr>
+                <th>نام کاربری</th>
+                <th>شماره کارت</th>
+                <th>مبلغ</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+// داده‌های نمونه برای کاربران
+let users_front = [];
+
+// داده‌های درخواست برداشت
+let withdrawals_front = [];
+
+// نمایش کاربران
+function loadUsers() {
+    console.log(2);
+    fetch('get_users.php') // Make sure this path is correct
+        .then(response => response.json())
+        .then(users => {
+            users_front = users;
+            const tbody = document.getElementById("user-list").getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+            users.forEach(user => {
+                const row = tbody.insertRow();
+                row.classList.toggle("status", user.status);
+                row.insertCell(0).innerText = user.username;
+                row.insertCell(1).innerText = user.password;
+                row.insertCell(2).innerText = user.phone;
+                row.insertCell(3).innerText = user.card;
+                row.insertCell(4).innerText = user.email;
+                row.insertCell(5).innerText = Number(user.balance).toLocaleString();
+
+                const cell = row.insertCell(6);
+                if (user.status == 'ban') {
+                    cell.innerHTML = `<button class="unblock-btn" onclick="unblockUser('${user.username}')">لغو مسدودیت</button>`;
+                } else {
+                    cell.innerHTML = `
+                        <button class="edit-btn" onclick="showUpdateBalance('${user.username}')">تغییر موجودی</button>
+                        <button class="block-btn" onclick="blockUser('${user.username}')">مسدود کردن</button>
+                        <button class="predict-btn" onclick="openUserPredictions('${user.username}')">پیش بینی ها</button>
+
+                    `;
+                }
+            });
+        })
+        .catch(error => console.error('Error loading users:', error));
+}
+
+
+// جستجوی کاربر
+function searchUser() {
+    const searchValue = document.getElementById("search-phone").value.toLowerCase();
+    const filteredUsers = users_front.filter(user => user.phone.includes(searchValue));
+    
+    const tbody = document.getElementById("user-list").getElementsByTagName("tbody")[0];
+    tbody.innerHTML = "";
+    filteredUsers.forEach(user => {
+        const row = tbody.insertRow();
+        if(user.status == 'ban'){
+            row.classList.toggle("blocked", user.status == 'ban');
+        }
+        row.insertCell(0).innerText = user.username;
+        row.insertCell(1).innerText = user.password;
+        row.insertCell(2).innerText = user.phone;
+        row.insertCell(3).innerText = user.card;
+        row.insertCell(4).innerText = user.email;
+        row.insertCell(5).innerText = user.balance.toLocaleString();
+        const cell = row.insertCell(6);
+        console.log(user.status);
+        if (user.status == 'ban') {
+            cell.innerHTML = `<button class="unblock-btn" onclick="unblockUser('${user.username}')">لغو مسدودیت</button>`;
+        } else {
+            cell.innerHTML = `
+                <button class="edit-btn" onclick="showUpdateBalance('${user.username}')">تغییر موجودی</button>
+                <button class="block-btn" onclick="blockUser('${user.username}')">مسدود کردن</button>
+                <button class="predict-btn" onclick="openUserPredictions('${user.username}')">پیش بینی ها</button>
+            `;
+        }
+    });
+}
+
+// تغییر موجودی
+function showUpdateBalance(username) {
+    const user = users_front.find(user => user.username === username);
+    if (user.status != 'ban') {
+        console.log("in if");
+        document.getElementById("update-balance").style.display = "block";
+        document.getElementById("new-balance").value = user.balance;
+        document.getElementById("update-balance").setAttribute("data-username", user.username);
+    }
+}
+
+async function updateBalance() {
+    const username = document.getElementById("update-balance").getAttribute("data-username");
+    const newBalance = parseInt(document.getElementById("new-balance").value);
+    if (!username || newBalance === undefined || newBalance === null) {
+        alert('Please provide both username and new balance.');
+        return;
+    }
+
+    try {
+        const response = await fetch('update_balance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                    username: username, // Send username
+                    balance: newBalance // Send balance
+                })
+        });
+
+        const result = await response.json();
+
+        if (result.message) {
+            console.log('Balance updated successfully!');
+        } else {
+            console.log('Error: ' + result.error);
+        }
+    } catch (error) {
+        console.log('Error: ' + error.message);
+    }
+
+    loadUsers();
+}
+
+
+function blockUser(username) {
+    banUser(username);
+}
+
+function unblockUser(username) {
+    unbanUser(username);    
+}
+
+async function loadWithdrawals() {
+    const tbody = document.getElementById("withdraw-list").getElementsByTagName("tbody")[0];
+    tbody.innerHTML = "";  // Clear the table before inserting new rows
+
+    try {
+        // Fetch payment requests from the PHP backend
+        const response = await fetch('get_payment_requests.php');
+        const withdrawals = await response.json();
+        withdrawals_front = withdrawals;
+        if (withdrawals.error) {
+            alert('Error: ' + withdrawals.error);
+            return;
+        }
+
+        // Insert each withdrawal as a new row in the table
+        withdrawals.forEach((w, index) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = w.username;
+            row.insertCell(1).innerText = w.card_number;
+            row.insertCell(2).innerText = w.amount.toLocaleString() + " تومان"; // Format amount
+            let temp = w.status;
+            if (temp == 'pending'){
+                temp = 'در انتظار';
+            }else if(temp == 'complete'){
+                temp = 'تأیید شد';
+            }else if(temp == 'not_complete'){
+                temp = 'رد شد';
+            }
+            row.insertCell(3).innerText = temp;
+
+
+            row.insertCell(4).innerHTML = `
+                <button class="edit-btn" onclick="approveWithdraw(${index}, ${w.id})">تأیید</button>
+                <button class="block-btn" onclick="rejectWithdraw(${index}, ${w.id})">رد</button>
+            `;
+        });
+    } catch (error) {
+        alert('Error fetching payment requests: ' + error.message);
+    }
+}
+
+
+function approveWithdraw(index, payment_id) {
+    withdrawals_front[index].status = "تأیید شد";
+    markComplete(payment_id);
+}
+
+function rejectWithdraw(index, payment_id) {
+    withdrawals_front[index].status = "رد شد";
+    markNotComplete(payment_id);
+}
+
+// Function to update payment request status to 'complete'
+async function markComplete(requestId) {
+    try {
+        const response = await fetch('update_payment_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: requestId, status: 'complete' })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('Payment request marked as complete.');
+            loadWithdrawals();  // Reload payment requests to reflect the change
+        } else {
+            console.log('Error: ' + result.error);
+        }
+    } catch (error) {
+        console.log('Error: ' + error.message);
+    }
+}
+
+// Function to update payment request status to 'not_complete'
+async function markNotComplete(requestId) {
+    try {
+        const response = await fetch('update_payment_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: requestId, status: 'not_complete' })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('Payment request marked as not complete.');
+            loadWithdrawals();  // Reload payment requests to reflect the change
+        } else {
+            console.log('Error: ' + result.error);
+        }
+    } catch (error) {
+        console.log('Error: ' + error.message);
+    }
+}
+
+async function changeUserStatus(action, username) {
+
+    if (!username) {
+        document.getElementById('response').innerText = 'Please enter a username.';
+        return;
+    }
+
+    try {
+        const response = await fetch('user_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, action })
+        });
+
+        const result = await response.json();
+        // document.getElementById('response').innerText = result.message;
+    } catch (error) {
+        document.getElementById('response').innerText = 'Error: ' + error.message;
+    }
+
+    loadUsers();
+
+}
+
+function banUser(username) {
+    changeUserStatus('ban', username);
+}
+
+function unbanUser(username) {
+    changeUserStatus('active', username);
+}
+
+function openUserPredictions(username) {
+    window.location.href = `user_predictions.html?username=${encodeURIComponent(username)}`;
+}
+
+// اجرا
+loadUsers();
+loadWithdrawals();
+</script>
+
+</body>
+</html>
